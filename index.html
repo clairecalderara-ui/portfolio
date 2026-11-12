@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claire Calderara — Portfolio</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/js/d3.min.js"></script>
+  <script src="assets/js/topojson.min.js"></script>
+  <script src="assets/js/world-data.js"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* ===== Nom du hero : reflet qui passe (sans couper les fioritures) ===== */
+    /* grande zone de peinture autour du texte, compensée par des marges négatives :
+       la mise en page ne bouge pas, mais les fioritures restent entièrement colorées */
+    .hero-shine-text{ display:inline-block; padding:.9em .6em .9em 1.4em; margin:-.9em -.6em -.9em -1.4em; }
+    @supports ((-webkit-background-clip:text) or (background-clip:text)){
+      .hero-shine-text{
+        background-image: linear-gradient(110deg, #d9c2ff 0%, #d9c2ff 38%, #ffffff 50%, #d9c2ff 62%, #d9c2ff 100%);
+        background-size: 250% 100%;
+        background-position: 100% 0;
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+        animation: hero-shine 5s ease-in-out infinite;
+      }
+    }
+    @keyframes hero-shine{ 0%{background-position:100% 0} 60%,100%{background-position:0 0} }
+
+    /* ===== Cheval : grand élément graphique ===== */
+    .horse-stage{ isolation:isolate; }
+    .horse-img{
+      filter: drop-shadow(0 0 42px rgba(192,132,252,.55)) drop-shadow(0 24px 30px rgba(0,0,0,.45));
+      animation: horse-float 8s ease-in-out infinite;
+      transition: scale .6s ease;
+    }
+    .horse-stage:hover .horse-img{ scale: 1.04; }
+    @keyframes horse-float{
+      0%,100%{ transform: translateY(0) rotate(-1deg); }
+      50%{ transform: translateY(-16px) rotate(1.5deg); }
+    }
+    .horse-halo{
+      position:absolute; left:50%; top:46%; width:105%; aspect-ratio:1; translate:-50% -50%;
+      border-radius:50%; pointer-events:none; z-index:-1;
+      background: radial-gradient(circle, rgba(168,85,247,.42) 0%, rgba(126,34,206,.18) 45%, transparent 70%);
+      filter: blur(14px);
+      animation: horse-pulse 6s ease-in-out infinite;
+    }
+    @keyframes horse-pulse{ 0%,100%{opacity:.75; scale:.96} 50%{opacity:1; scale:1.04} }
+    .horse-ring{
+      position:absolute; left:50%; top:46%; translate:-50% -50%; border-radius:50%;
+      pointer-events:none; z-index:-1;
+    }
+    .horse-ring-1{ width:92%; aspect-ratio:1; border:1.5px dashed rgba(216,180,254,.4); animation: horse-spin 70s linear infinite; }
+    .horse-ring-2{ width:100%; aspect-ratio:1; border:1px solid rgba(216,180,254,.14); animation: horse-spin 110s linear infinite reverse; }
+    @keyframes horse-spin{ to{ rotate:360deg } }
+    .horse-spark{
+      position:absolute; left:var(--x); top:var(--y); font-size:var(--s); color:#f0d9ff; z-index:5;
+      text-shadow:0 0 14px rgba(232,121,249,.9); pointer-events:none;
+      animation: horse-twinkle 3.2s ease-in-out infinite; animation-delay:var(--t);
+    }
+    @keyframes horse-twinkle{ 0%,100%{opacity:.25; transform:scale(.7) rotate(0deg)} 50%{opacity:1; transform:scale(1.15) rotate(20deg)} }
+
+    @media (prefers-reduced-motion: reduce){
+      .hero-shine-text{ animation:none; background-position:100% 0; }
+      .horse-img, .horse-halo, .horse-ring, .horse-spark{ animation:none; }
+    }
+  </style>
+</head>
+<body class="aura-bg text-slate-100 min-h-screen relative selection:bg-purple-600 selection:text-white">
+
+  <!-- Minimal Transparent Navigation -->
+  <header class="fixed top-0 left-0 w-full z-50 backdrop-blur-sm bg-[#090314]/40">
+    <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+      <a href="index.html" class="font-script text-3xl sm:text-4xl text-purple-200 hover:text-white transition-colors">
+        Claire
+      </a>
+
+      <nav class="flex items-center gap-8 font-title text-sm tracking-wider uppercase">
+        <a href="#la-brujita" class="text-slate-300 hover:text-purple-300 transition-colors">La brujita</a>
+        <a href="#accords-sensibles" class="text-slate-300 hover:text-purple-300 transition-colors">Musique</a>
+        <a href="#miss-worldwide" class="text-slate-300 hover:text-purple-300 transition-colors">Voyages</a>
+        <a href="projets.html" class="text-purple-300 hover:text-white transition-colors flex items-center gap-1.5">
+          <span>Projets</span>
+          <span>✦</span>
+        </a>
+        <a href="contact.html" class="text-slate-300 hover:text-purple-300 transition-colors">
+          Contact
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 1. HERO SECTION : UNIQUEMENT LA VIDÉO ET LE NOM EN BAS À DROITE (COMME SUR LE MOCKUP) -->
+  <section class="relative w-full h-screen min-h-[600px] overflow-x-clip">
+    <!-- Video Fullscreen Container (Clipped) -->
+    <div class="absolute inset-0 w-full h-full overflow-hidden">
+      <video id="hero-video" autoplay loop muted playsinline preload="auto" disablepictureinpicture class="w-full h-full object-cover">
+        <source src="assets/videos/hero.mp4" type="video/mp4">
+      </video>
+      <!-- Subtle gradient at bottom for legibility -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#090314]/90 via-[#090314]/20 to-black/30 pointer-events-none"></div>
+    </div>
+
+    <!-- Claire Calderara Name strictly in the bottom-right corner as on the Mockup, flourishes unclipped -->
+    <div class="absolute bottom-2 right-4 sm:bottom-6 sm:right-8 lg:bottom-6 lg:right-16 z-30 text-right overflow-visible pointer-events-none">
+      <h1 class="hero-signature text-purple-100 drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] select-none">
+        <span class="hero-shine-text">Claire Calderara</span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- 2. SECTION LA BRUJITA : CHEVAL STICKER EN VIOLET + TEXTE + BOUTON ÉTOILE MOCKUP -->
+  <section id="la-brujita" class="relative py-28 px-6 max-w-7xl mx-auto overflow-hidden">
+    
+    <!-- Background subtle sparkles & filigree glow -->
+    <div class="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-purple-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      
+      <!-- Left: le cheval comme grand élément graphique + bouton étoile -->
+      <div class="lg:col-span-5 relative flex flex-col items-center lg:items-start">
+        <div class="horse-stage relative w-full max-w-[460px] lg:max-w-none lg:w-[112%]">
+          <div class="horse-halo" aria-hidden="true"></div>
+          <div class="horse-ring horse-ring-1" aria-hidden="true"></div>
+          <div class="horse-ring horse-ring-2" aria-hidden="true"></div>
+          <span class="horse-spark" style="--x:6%;--y:12%;--s:1.5rem;--t:0s" aria-hidden="true">✦</span>
+          <span class="horse-spark" style="--x:88%;--y:8%;--s:1rem;--t:1.2s" aria-hidden="true">✦</span>
+          <span class="horse-spark" style="--x:94%;--y:46%;--s:1.6rem;--t:2.1s" aria-hidden="true">✦</span>
+          <span class="horse-spark" style="--x:4%;--y:58%;--s:1rem;--t:.6s" aria-hidden="true">✦</span>
+          <span class="horse-spark" style="--x:80%;--y:78%;--s:1.2rem;--t:1.7s" aria-hidden="true">✦</span>
+          <span class="horse-spark" style="--x:18%;--y:84%;--s:1.4rem;--t:2.6s" aria-hidden="true">✦</span>
+
+          <img
+            src="assets/images/horse_sticker.png"
+            alt="Cheval Céleste Violet"
+            class="horse-img relative z-10 w-full h-auto object-contain"
+          />
+
+          <!-- Star Button (lien vers mes projets) -->
+          <div class="relative z-20 mt-4 flex justify-center">
+            <a href="projets.html" class="star-btn-mockup group">
+              <span class="mr-2">✦</span>
+              <span>Voir mes projets</span>
+              <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Titre "La brujita" & texte de Claire -->
+      <div class="lg:col-span-7 flex flex-col items-start">
+        <h2 id="kinetic-brujita" data-kinetic data-kt-lines="La|brujita" aria-label="La brujita" class="font-title text-4xl sm:text-6xl text-white tracking-tight uppercase">
+          <span class="block">La</span>
+          <span class="block text-purple-200">brujita</span>
+        </h2>
+
+        <!-- Magic UI Morphing Text subtle accent -->
+        <div class="mt-3 flex items-center gap-2 text-purple-300 font-title text-xs tracking-widest uppercase">
+          <span>✦</span>
+          <span id="morph-container" class="relative inline-block h-6">
+            <span id="morph-text1" class="absolute left-0 top-0 transition-all duration-300"></span>
+            <span id="morph-text2" class="absolute left-0 top-0 transition-all duration-300"></span>
+          </span>
+        </div>
+
+        <div class="mt-8 space-y-6 text-slate-200 font-body text-base sm:text-lg font-light leading-relaxed">
+          <p>
+            Una brujita, c’est une petite sorcière en espagnol, mais dans certaines cultures d’Amérique latine, elle peut évoquer une féminité indépendante, mystérieuse ou un peu rebelle. Je pense que ça me définit plutôt bien.
+          </p>
+          <p>
+            Au fond de moi, je reste encore une petite fille qui se laisse porter dans son propre univers. Et cet univers, je l’alimente chaque jour grâce à mes souvenirs, à mes réussites et à mes échecs.
+          </p>
+          <p>
+            Aujourd’hui, je ne suis plus haute comme trois pommes, mais je rêve toujours aussi grand. Je rêve de voyager, de continuer à créer, à imaginer et surtout à explorer. J’ai encore parfois du mal à m’ouvrir au monde, à me dévoiler, mais ici, j’essaie de partager un morceau de mon univers, un petit peu de moi.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. SECTION ACCORDS SENSIBLES : KINETIC "MUSIC IS THE ANSWER" + TEXTE + IPOD -->
+  <section id="accords-sensibles" class="relative py-28 px-6 max-w-7xl mx-auto overflow-hidden">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      
+      <!-- Left: Kinetic typography "music is the answer" + Texte -->
+      <div class="lg:col-span-7 flex flex-col items-start order-2 lg:order-1">
+        
+        <!-- Titre animé : Accords sensibles -->
+        <h2 id="kinetic-container" data-kinetic data-kt-lines="Accords|sensibles" aria-label="Accords sensibles"
+            class="mb-8 cursor-default font-title text-5xl sm:text-7xl lg:text-8xl uppercase tracking-tighter text-white">
+          <span class="block">Accords</span>
+          <span class="block text-purple-200">sensibles</span>
+        </h2>
+
+        <div class="space-y-5 text-slate-200 font-body text-base sm:text-lg font-light leading-relaxed">
+          <p>
+            Petite, on m’a inscrite au solfège. Après quelques années, il a fallu choisir un instrument, alors j’ai choisi le saxophone. Il était beaucoup trop grand pour moi : il m’arrivait en dessous du genou. On m’avait proposé d’en changer pour un instrument plus petit, mais je ne voulais pas. J’avais fait mon choix, et c’était le saxophone que je voulais.
+          </p>
+          <p>
+            Aujourd’hui, j’ai délaissé le saxophone pour les platines, mais la musique me transporte toujours autant. Ce qui me fascine, c’est la palette d’émotions que l’on peut transmettre et ressentir à travers elle. C’est aussi cette façon qu’a une chanson de s’associer à un moment bien particulier, jusqu’à en devenir indissociable.
+          </p>
+          <p class="text-purple-200 font-normal">
+            Cet art m’a accompagnée dans bien des moments de la vie, les plus heureux comme les plus difficiles, et il continuera de m’accompagner chaque jour. La musique m’a appris à entendre, mais surtout à écouter.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Right: L'iPod Classic flottant directement sur le fond -->
+      <div class="lg:col-span-5 flex justify-center order-1 lg:order-2">
+        <div class="ipod-case">
+          <!-- Screen -->
+          <div class="ipod-screen">
+            <div class="flex items-center justify-between text-[10px] text-zinc-400 font-mono border-b border-zinc-800 pb-1">
+              <span>▶ iPod</span>
+              <span class="text-purple-300">Playlist</span>
+              <span>100%</span>
+            </div>
+
+            <div class="text-center my-auto">
+              <p class="font-title text-xs uppercase text-purple-300 tracking-wider">Claire's Playlist</p>
+              <p class="font-body text-sm text-white font-medium mt-1">MEGA BBL — Theodora</p>
+              
+              <!-- Sound wave equalizer -->
+              <div class="flex items-center justify-center gap-1 mt-3 h-6">
+                <span class="w-1 bg-purple-400 rounded-full h-2" style="animation: soundWave 0.5s infinite alternate;"></span>
+                <span class="w-1 bg-purple-300 rounded-full h-4" style="animation: soundWave 0.7s infinite alternate;"></span>
+                <span class="w-1 bg-pink-400 rounded-full h-6" style="animation: soundWave 0.4s infinite alternate;"></span>
+                <span class="w-1 bg-purple-400 rounded-full h-3" style="animation: soundWave 0.8s infinite alternate;"></span>
+                <span class="w-1 bg-purple-200 rounded-full h-5" style="animation: soundWave 0.6s infinite alternate;"></span>
+              </div>
+            </div>
+
+            <!-- Spotify link button on screen -->
+            <a 
+              href="https://open.spotify.com/playlist/5UdBplXYb1IHHjjwKtKh7d?si=b86d1d63f6fe48ad" 
+              target="_blank" 
+              class="w-full py-1.5 bg-purple-950/80 hover:bg-purple-800 text-purple-200 text-center rounded text-[11px] font-title uppercase tracking-wider transition-colors"
+            >
+              Écouter sur Spotify ↗
+            </a>
+          </div>
+
+          <!-- Wheel -->
+          <div class="ipod-wheel">
+            <span class="absolute top-2.5 text-[10px] font-title font-bold tracking-widest text-zinc-400 uppercase">MENU</span>
+            <span class="absolute left-2.5 text-[11px] text-zinc-400">|◀◀</span>
+            <span class="absolute right-2.5 text-[11px] text-zinc-400">▶▶|</span>
+            <span class="absolute bottom-2.5 text-[11px] text-zinc-400">▶❚❚</span>
+            <a href="https://open.spotify.com/playlist/5UdBplXYb1IHHjjwKtKh7d?si=b86d1d63f6fe48ad" target="_blank" class="ipod-center-btn" title="Ouvrir la playlist"></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. SECTION MISS WORLDWIDE : GLOBE 3D AVEC TOUS LES PAYS CARTOGRAPHIES -->
+  <section id="miss-worldwide" class="relative py-28 px-6 max-w-7xl mx-auto overflow-hidden">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <h2 id="kinetic-worldwide" data-kinetic data-kt-lines="Miss|Worldwide" aria-label="Miss Worldwide" class="font-title text-4xl sm:text-6xl text-white tracking-tight uppercase">
+        <span class="block">Miss</span>
+        <span class="block text-purple-200">Worldwide</span>
+      </h2>
+      <p class="mt-2 font-body text-purple-300 text-sm sm:text-base tracking-wider">
+        all the countries i've been on the globe
+      </p>
+    </div>
+
+    <!-- 3D Vector Globe Container -->
+    <div class="relative w-full max-w-2xl mx-auto aspect-square flex items-center justify-center">
+      <!-- Glow behind globe -->
+      <div class="absolute inset-8 bg-purple-600/15 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <!-- Mount for D3 Canvas Globe -->
+      <div id="globe-container" class="relative z-10 flex items-center justify-center"></div>
+
+      <!-- Tooltip on hover -->
+      <div 
+        id="globe-tooltip" 
+        class="fixed pointer-events-none opacity-0 z-50 px-3.5 py-1.5 rounded-lg bg-[#090314]/90 text-purple-200 border border-purple-400/40 text-xs font-title uppercase tracking-wider backdrop-blur-md transition-opacity duration-150"
+      ></div>
+    </div>
+
+    <!-- Légende -->
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 font-body text-sm text-slate-300">
+      <span class="flex items-center gap-2">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-fuchsia-300 shadow-[0_0_10px_rgba(240,171,252,0.9)]"></span>
+        <span><span id="globe-count" class="text-white font-medium">29</span> pays déjà visités</span>
+      </span>
+      <span class="text-slate-400 text-xs">Fais glisser le globe pour le faire tourner</span>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-12 px-8 border-t border-purple-500/15 bg-[#06020d] text-slate-400 font-body text-sm">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <span class="font-script text-3xl text-purple-200">Claire Calderara</span>
+      <div class="flex items-center gap-6 font-title text-xs tracking-wider uppercase">
+        <a href="projets.html" class="hover:text-white transition-colors">Mes Projets</a>
+        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+        <a href="https://www.youtube.com/@binausore" target="_blank" class="hover:text-purple-300">YouTube @binausore</a>
+        <a href="https://open.spotify.com/playlist/5UdBplXYb1IHHjjwKtKh7d?si=b86d1d63f6fe48ad" target="_blank" class="hover:text-purple-300">Spotify</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/morphing-text.js"></script>
+  <script src="assets/js/kinetic-text.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/globe.js"></script>
+  <!-- Modification ici : kinetic-titles.js (avec un "s") pour animer tous les titres avec data-kinetic -->
+  <script src="assets/js/kinetic-titles.js" defer></script>
+  
+  <!-- Vidéo du hero : lecture automatique, en boucle, sans bouton play -->
+  <script>
+    (function () {
+      var v = document.getElementById('hero-video');
+      if (!v) return;
+      v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true;
+      function go() { var p = v.play(); if (p && p.catch) p.catch(function (e) { console.warn('Vidéo hero : lecture bloquée →', e && e.name); }); }
+      var src = v.querySelector('source');
+      if (src) src.addEventListener('error', function () { console.warn('Vidéo hero : assets/videos/hero.mp4 est introuvable ou dans un format que le navigateur ne lit pas.'); });
+      go();
+      v.addEventListener('canplay', go);
+      v.addEventListener('ended', function () { v.currentTime = 0; go(); });
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) go(); });
+      ['click', 'touchstart', 'scroll', 'keydown'].forEach(function (ev) {
+        window.addEventListener(ev, function once() { go(); window.removeEventListener(ev, once); }, { passive: true });
+      });
+    })();
+  </script>
+</body>
+</html>

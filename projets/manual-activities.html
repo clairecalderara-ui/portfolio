@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les mains toujours occupées — Claire Calderara</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    /* ===== Cadres de musée argentés ===== */
+    .fr-cell{ display:flex; justify-content:center; padding:2.2rem 1.8rem; }
+    .fr-card{
+      position:relative; width:min(100%, 340px); container-type:inline-size; perspective:1400px;
+      cursor:pointer; outline:none; transition: translate .35s ease;
+      --mp:5cqw; --ch:calc(var(--cr) * .5714);
+    }
+    .fr-card:hover{ translate:0 -5px; }
+    .fr-card:focus-visible .fr-rail{ box-shadow:0 0 0 3px #c084fc, 0 22px 44px rgba(0,0,0,.6); }
+    .fr-flip{ display:grid; transform-style:preserve-3d; transition: transform .85s cubic-bezier(.2,.7,.2,1); }
+    .fr-card.is-flipped .fr-flip{ transform: rotateY(180deg); }
+    .fr-face{ grid-area:1/1; display:flex; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+    .fr-face.back{ transform: rotateY(180deg); }
+
+    /* rail argenté */
+    .fr-rail{
+      position:relative; flex:1; display:flex; flex-direction:column; padding:var(--bw); border-radius:4px;
+      background: linear-gradient(var(--ang,135deg), #f7f8fb 0%, #b4b8c1 22%, #eef0f4 42%, #868b97 64%, #d7dae0 84%, #9ca1ac 100%);
+      box-shadow:
+        0 22px 44px rgba(0,0,0,.6), 0 0 32px rgba(192,132,252,.22),
+        inset 0 0 0 1.5px rgba(255,255,255,.9), inset 0 0 0 4px rgba(72,77,90,.55), inset 0 0 0 5.5px rgba(255,255,255,.4);
+    }
+    .fr-rail::after{
+      content:""; position:absolute; inset:calc(var(--bw) * .36); pointer-events:none;
+      border:1.5px solid rgba(70,75,88,.5); border-radius:2px; box-shadow:0 0 0 1.5px rgba(255,255,255,.5);
+    }
+    /* passe-partout */
+    .fr-mat{
+      position:relative; flex:1; background:#f1eee8; padding:var(--mp);
+      box-shadow: 0 0 0 2px #5d626d, 0 0 0 3.5px rgba(255,255,255,.6), inset 0 5px 16px rgba(0,0,0,.35);
+    }
+    .fr-mat img{ display:block; width:100%; height:auto; box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 3px 8px rgba(0,0,0,.35); }
+
+    /* dos du cadre : cartel */
+    .fr-mat.plaque{
+      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+      padding:9cqw 7cqw; background: radial-gradient(circle at 50% 30%, #f9f7f2, #e6e1d6);
+    }
+    .plaque .mark{ color:#7c5ac0; font-size:6cqw; margin-bottom:3.5cqw; }
+    .plaque p{ margin:0; font-style:italic; font-size:clamp(.95rem, 5.4cqw, 1.2rem); line-height:1.45; color:#2b2540; text-wrap:balance; }
+
+    /* ornements rocaille */
+    .co, .cr{ position:absolute; pointer-events:none; filter: drop-shadow(0 2px 2px rgba(0,0,0,.45)); }
+    .co{ width:var(--co); height:var(--co); }
+    .co.tl{ left:calc(var(--co) * -.3);  top:calc(var(--co) * -.3); }
+    .co.tr{ right:calc(var(--co) * -.3); top:calc(var(--co) * -.3);    transform:scaleX(-1); }
+    .co.bl{ left:calc(var(--co) * -.3);  bottom:calc(var(--co) * -.3); transform:scaleY(-1); }
+    .co.br{ right:calc(var(--co) * -.3); bottom:calc(var(--co) * -.3); transform:scale(-1,-1); }
+    .cr{ width:var(--cr); aspect-ratio:140 / 80; }
+    .cr.t{ left:50%; top:calc(var(--ch) * -.15);    transform:translate(-50%,-50%); }
+    .cr.b{ left:50%; bottom:calc(var(--ch) * -.15); transform:translate(-50%,50%) rotate(180deg); }
+    .cr.l{ top:50%; left:calc(var(--ch) * -.15);    transform:translate(-50%,-50%) rotate(-90deg); }
+    .cr.r{ top:50%; right:calc(var(--ch) * -.15);   transform:translate(50%,-50%) rotate(90deg); }
+
+    @media (prefers-reduced-motion: reduce){
+      .fr-flip{ transition-duration:.01s; }
+      .fr-card{ transition:none; }
+    }
+  </style>
+</head>
+<body class="aura-bg text-slate-100 min-h-screen relative selection:bg-purple-600 selection:text-white">
+
+  <!-- Transparent Navigation -->
+  <header class="fixed top-0 left-0 w-full z-50 backdrop-blur-sm bg-[#090314]/50">
+    <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+      <a href="../index.html" class="font-script text-3xl sm:text-4xl text-purple-200 hover:text-white transition-colors">
+        Claire
+      </a>
+
+      <nav class="flex items-center gap-6 font-title text-sm tracking-wider uppercase">
+        <a href="../projets.html" class="text-slate-300 hover:text-purple-300 transition-colors flex items-center gap-1.5">
+          <span>←</span>
+          <span>Projets</span>
+        </a>
+        <a href="../contact.html" class="text-slate-300 hover:text-purple-300 transition-colors">
+          Contact
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pt-32 pb-24 px-8 max-w-7xl mx-auto">
+
+    <!-- Title (No numbers) -->
+    <div class="mb-10">
+      <h1 class="font-title text-4xl sm:text-6xl text-white uppercase tracking-tight">
+        Les mains toujours occupées
+      </h1>
+    </div>
+
+    <!-- Claire's exact text -->
+    <div class="space-y-6 text-slate-200 font-body text-base sm:text-lg font-light leading-relaxed max-w-3xl mb-16">
+      <p>
+        « Pourquoi te définis-tu comme quelqu’un de créatif ? » Parce que j’ai toujours baigné dans cet univers. J’ai constamment besoin de créer, que ce soit en laissant libre cours à mon imagination ou en donnant vie à mes idées avec mes mains. Associée à ma curiosité, cette créativité m’a poussée à explorer une multitude d’activités manuelles.
+      </p>
+      <p>
+        La liste serait bien trop longue pour toutes les citer, mais le confinement a été une période particulièrement propice à cette exploration. J’y ai appris la couture, la broderie et l’aquarelle. Depuis, ma curiosité ne cesse de grandir et je continue à expérimenter de nouvelles pratiques. Dernièrement, je me suis notamment essayée au scrapbooking, au nail art, à la sculpture sur argile, à la pâte polymère et à bien d’autres activités. J’aime découvrir, tester, apprendre et surtout, ne jamais cesser de créer.
+      </p>
+    </div>
+
+    <!-- Galerie : chaque création dans un cadre de musée, cliquable pour le retourner -->
+    <!-- Ornements argentés réutilisés par tous les cadres -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="fr-silver" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#f7f8fb"/><stop offset=".25" stop-color="#b4b8c1"/>
+          <stop offset=".45" stop-color="#eef0f4"/><stop offset=".68" stop-color="#8b909b"/>
+          <stop offset=".86" stop-color="#d8dbe1"/><stop offset="1" stop-color="#a0a5b0"/>
+        </linearGradient>
+
+        <!-- Coins : A rosace, B feuilles d'acanthe, C volutes -->
+        <symbol id="co-a" viewBox="0 0 100 100">
+          <g id="co-a-sc" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M52 26 C64 12 84 14 90 28 C94 38 84 44 78 38 C74 34 79 29 83 32" stroke="#585d69" stroke-width="7"/>
+            <path d="M52 26 C64 12 84 14 90 28 C94 38 84 44 78 38 C74 34 79 29 83 32" stroke="#e4e6eb" stroke-width="4.2"/>
+          </g>
+          <use href="#co-a-sc" transform="matrix(0 1 1 0 0 0)"/>
+          <g transform="translate(28 28)" fill="url(#fr-silver)" stroke="#585d69" stroke-width="1.2">
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12"/>
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12" transform="rotate(45)"/>
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12" transform="rotate(90)"/>
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12" transform="rotate(135)"/>
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12" transform="rotate(180)"/>
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12" transform="rotate(225)"/>
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12" transform="rotate(270)"/>
+            <ellipse cx="0" cy="-15" rx="6.5" ry="12" transform="rotate(315)"/>
+          </g>
+          <circle cx="28" cy="28" r="8" fill="#f4f5f8" stroke="#585d69" stroke-width="1.2"/>
+          <circle cx="28" cy="28" r="3" fill="#8b909b"/>
+        </symbol>
+
+        <symbol id="co-b" viewBox="0 0 100 100">
+          <g transform="translate(24 24)" fill="url(#fr-silver)" stroke="#585d69" stroke-width="1.3">
+            <g transform="rotate(71)"><path d="M0 0 C-10 -8 -10 -26 0 -40 C10 -26 10 -8 0 0Z"/><path d="M0 -4 L0 -32" fill="none" stroke-opacity=".5" stroke-width="1"/></g>
+            <g transform="rotate(103)"><path d="M0 0 C-10 -8 -10 -26 0 -40 C10 -26 10 -8 0 0Z"/><path d="M0 -4 L0 -32" fill="none" stroke-opacity=".5" stroke-width="1"/></g>
+            <g transform="rotate(135)"><path d="M0 0 C-10 -8 -10 -26 0 -40 C10 -26 10 -8 0 0Z"/><path d="M0 -4 L0 -32" fill="none" stroke-opacity=".5" stroke-width="1"/></g>
+            <g transform="rotate(167)"><path d="M0 0 C-10 -8 -10 -26 0 -40 C10 -26 10 -8 0 0Z"/><path d="M0 -4 L0 -32" fill="none" stroke-opacity=".5" stroke-width="1"/></g>
+            <g transform="rotate(199)"><path d="M0 0 C-10 -8 -10 -26 0 -40 C10 -26 10 -8 0 0Z"/><path d="M0 -4 L0 -32" fill="none" stroke-opacity=".5" stroke-width="1"/></g>
+          </g>
+          <circle cx="24" cy="24" r="11" fill="#f4f5f8" stroke="#585d69" stroke-width="1.3"/>
+          <circle cx="24" cy="24" r="4" fill="#8b909b"/>
+          <circle cx="74" cy="9" r="2.8" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+          <circle cx="86" cy="9" r="2.8" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+          <circle cx="9" cy="74" r="2.8" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+          <circle cx="9" cy="86" r="2.8" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+        </symbol>
+
+        <symbol id="co-c" viewBox="0 0 100 100">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 18 C42 6 66 12 68 34 C70 50 48 54 44 40 C41 30 54 26 56 34" stroke="#585d69" stroke-width="7.2"/>
+            <path d="M18 18 C42 6 66 12 68 34 C70 50 48 54 44 40 C41 30 54 26 56 34" stroke="#e4e6eb" stroke-width="4.4"/>
+            <path d="M18 18 C6 42 12 66 34 68 C50 70 54 48 40 44 C30 41 26 54 34 56" stroke="#585d69" stroke-width="7.2"/>
+            <path d="M18 18 C6 42 12 66 34 68 C50 70 54 48 40 44 C30 41 26 54 34 56" stroke="#e4e6eb" stroke-width="4.4"/>
+          </g>
+          <circle cx="20" cy="20" r="12" fill="url(#fr-silver)" stroke="#585d69" stroke-width="1.3"/>
+          <circle cx="20" cy="20" r="5" fill="#f4f5f8" stroke="#585d69" stroke-width="1"/>
+          <circle cx="80" cy="16" r="2.6" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+          <circle cx="90" cy="16" r="2.6" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+          <circle cx="16" cy="80" r="2.6" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+          <circle cx="16" cy="90" r="2.6" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+        </symbol>
+
+        <!-- Cartouches du milieu des côtés : A coquille, B fleur de lys, C trèfle -->
+        <symbol id="cr-a" viewBox="-70 -42 140 80">
+          <g id="cr-a-sc" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M-24 12 C-50 16 -68 -2 -58 -21 C-52 -33 -37 -29 -40 -18 C-42 -11 -50 -12 -50 -18" stroke="#585d69" stroke-width="7.5"/>
+            <path d="M-24 12 C-50 16 -68 -2 -58 -21 C-52 -33 -37 -29 -40 -18 C-42 -11 -50 -12 -50 -18" stroke="#e4e6eb" stroke-width="4.6"/>
+            <path d="M-26 10 C-48 13 -64 -2 -56 -19" stroke="#ffffff" stroke-width="1.3" stroke-opacity=".9"/>
+          </g>
+          <use href="#cr-a-sc" transform="scale(-1 1)"/>
+          <path d="M-27 15 Q-33 -13 0 -28 Q33 -13 27 15 Q0 26 -27 15Z" fill="url(#fr-silver)" stroke="#585d69" stroke-width="1.6"/>
+          <g stroke="#585d69" stroke-opacity=".55" stroke-width=".9" fill="none">
+            <path d="M0 18 L-21 -8"/><path d="M0 18 L-11 -21"/><path d="M0 18 L0 -25"/><path d="M0 18 L11 -21"/><path d="M0 18 L21 -8"/>
+          </g>
+          <circle cx="0" cy="-33" r="3.2" fill="#f3f4f7" stroke="#585d69" stroke-width="1"/>
+        </symbol>
+
+        <symbol id="cr-b" viewBox="-70 -42 140 80">
+          <g id="cr-b-sc" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 6) scale(.85)">
+            <path d="M-24 12 C-50 16 -68 -2 -58 -21 C-52 -33 -37 -29 -40 -18 C-42 -11 -50 -12 -50 -18" stroke="#585d69" stroke-width="7.5"/>
+            <path d="M-24 12 C-50 16 -68 -2 -58 -21 C-52 -33 -37 -29 -40 -18 C-42 -11 -50 -12 -50 -18" stroke="#e4e6eb" stroke-width="4.6"/>
+          </g>
+          <use href="#cr-b-sc" transform="scale(-1 1)"/>
+          <g fill="url(#fr-silver)" stroke="#585d69" stroke-width="1.5">
+            <path d="M-3 14 C-26 12 -38 -4 -30 -20 C-22 -12 -14 -6 -6 -2Z"/>
+            <path d="M3 14 C26 12 38 -4 30 -20 C22 -12 14 -6 6 -2Z"/>
+            <path d="M0 14 C-10 -2 -8 -20 0 -34 C8 -20 10 -2 0 14Z"/>
+            <rect x="-16" y="10" width="32" height="8" rx="3"/>
+          </g>
+          <circle cx="0" cy="-38" r="2.8" fill="#f3f4f7" stroke="#585d69" stroke-width="1"/>
+        </symbol>
+
+        <symbol id="cr-c" viewBox="-70 -42 140 80">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M-30 10 C-48 12 -62 2 -57 -12 C-54 -20 -44 -18 -46 -11" stroke="#585d69" stroke-width="7"/>
+            <path d="M-30 10 C-48 12 -62 2 -57 -12 C-54 -20 -44 -18 -46 -11" stroke="#e4e6eb" stroke-width="4.2"/>
+            <path d="M30 10 C48 12 62 2 57 -12 C54 -20 44 -18 46 -11" stroke="#585d69" stroke-width="7"/>
+            <path d="M30 10 C48 12 62 2 57 -12 C54 -20 44 -18 46 -11" stroke="#e4e6eb" stroke-width="4.2"/>
+          </g>
+          <g fill="url(#fr-silver)" stroke="#585d69" stroke-width="1.5">
+            <path d="M-24 8 Q0 32 24 8 Q0 -2 -24 8Z"/>
+            <circle cx="0" cy="-16" r="12"/><circle cx="-21" cy="-4" r="9"/><circle cx="21" cy="-4" r="9"/>
+          </g>
+          <circle cx="0" cy="-16" r="4" fill="#f4f5f8" stroke="#585d69" stroke-width="1"/>
+          <circle cx="-38" cy="14" r="3" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+          <circle cx="38" cy="14" r="3" fill="#eceef2" stroke="#585d69" stroke-width="1"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <p class="mb-2 font-title text-xs sm:text-sm tracking-widest uppercase text-purple-300">✦ Clique sur un cadre pour le retourner</p>
+
+    <div class="relative py-6">
+      <!-- Ambient aura background -->
+      <div class="absolute inset-0 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 items-center">
+
+        <!-- Cadre 1 : Cendrier Étoile -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Cendrier Étoile : retourner le cadre pour lire le commentaire"
+               style="--bw:7cqw;--co:26cqw;--cr:25cqw;--ang:135deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_ashtray.png" alt="Cendrier Étoile" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;Superbe cendrier étoile en argile&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 2 : Briquets Étoiles de mer -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Briquets Étoiles de mer : retourner le cadre pour lire le commentaire"
+               style="--bw:6cqw;--co:27cqw;--cr:24cqw;--ang:120deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_starfish_lighters.png" alt="Briquets Étoiles de mer" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;Duo de briquets étoile réalisé à la pâte à modeler auto-durcissante&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 3 : Briquet Poulpe -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Briquet Poulpe : retourner le cadre pour lire le commentaire"
+               style="--bw:7.5cqw;--co:25cqw;--cr:26cqw;--ang:150deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_octopus_lighter.png" alt="Briquet Poulpe" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;Encore un briquet, mais cette fois-ci une pieuvre&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 4 : Briquets Personnages -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Briquets Personnages : retourner le cadre pour lire le commentaire"
+               style="--bw:5.5cqw;--co:24cqw;--cr:22cqw;--ang:110deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_characters_lighters.png" alt="Briquets Personnages" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;J’adore vraiment faire des briquets&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 5 : Toiles Acrylique -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Toiles Acrylique : retourner le cadre pour lire le commentaire"
+               style="--bw:8cqw;--co:28cqw;--cr:24cqw;--ang:140deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_canvases.png" alt="Toiles Acrylique" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;Ne me demandez pas pourquoi elle a la peau grise…&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 6 : Nail Art Perles -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Nail Art Perles : retourner le cadre pour lire le commentaire"
+               style="--bw:6.5cqw;--co:26cqw;--cr:23cqw;--ang:125deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_nails.png" alt="Nail Art Perles" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;J’adore faire du nail art, ça m’apprend la patience, une qualité que je n’ai pas vraiment&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-a"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 7 : Collage Scrapbooking -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Collage Scrapbooking : retourner le cadre pour lire le commentaire"
+               style="--bw:7cqw;--co:25cqw;--cr:25cqw;--ang:155deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_rich_spirit.png" alt="Collage Scrapbooking" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;Mes abonnements magazines ont bien été rentabilisés&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-a"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 8 : Collage Karlsplatz -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Collage Karlsplatz : retourner le cadre pour lire le commentaire"
+               style="--bw:6cqw;--co:26cqw;--cr:24cqw;--ang:115deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_karlsplatz.png" alt="Collage Karlsplatz" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;Collage, collage, collage&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-b"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-c"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cadre 9 : Aquarelle Méduse -->
+        <div class="fr-cell">
+          <div class="fr-card" role="button" tabindex="0" aria-pressed="false"
+               aria-label="Aquarelle Méduse : retourner le cadre pour lire le commentaire"
+               style="--bw:7.5cqw;--co:27cqw;--cr:23cqw;--ang:145deg">
+            <div class="fr-flip">
+              <div class="fr-face front"><div class="fr-rail"><div class="fr-mat"><img src="../assets/images/manual-activities/stickers/sticker_jellyfish.png" alt="Aquarelle Méduse" loading="lazy"></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg></div></div>
+              <div class="fr-face back"><div class="fr-rail"><div class="fr-mat plaque"><span class="mark" aria-hidden="true">✦</span><p class="font-body">«&nbsp;Aquarelle exceptionnelle&nbsp;»</p></div><svg class="co tl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co tr" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co bl" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="co br" viewBox="0 0 100 100" aria-hidden="true"><use href="#co-c"/></svg><svg class="cr t" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr b" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr l" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg><svg class="cr r" viewBox="0 0 140 80" aria-hidden="true"><use href="#cr-b"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="pt-12 border-t border-purple-500/20 flex items-center justify-between font-title text-sm uppercase tracking-wider">
+      <a href="photography.html" class="text-slate-400 hover:text-white transition-colors">
+        ← Derrière l’objectif
+      </a>
+      <a href="marie-louise-et-robert.html" class="text-purple-300 hover:text-white transition-colors">
+        Marie-Louise et Robert →
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="py-12 px-8 border-t border-purple-500/15 bg-[#06020d] text-slate-400 font-body text-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <span class="font-script text-3xl text-purple-200">Claire Calderara</span>
+      <div class="flex items-center gap-6 font-title text-xs tracking-wider uppercase">
+        <a href="marie-louise-et-robert.html" class="hover:text-white">Projet suivant</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.fr-card').forEach(function (card) {
+      function toggle() {
+        var on = card.classList.toggle('is-flipped');
+        card.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+      card.addEventListener('click', toggle);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+  </script>
+  <script src="../assets/js/stars.js" defer></script>
+  <script src="../assets/js/hyper-text.js" data-auto defer></script>
+</body>
+</html>

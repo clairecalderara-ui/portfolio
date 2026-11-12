@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+/* Font Declarations */
+@font-face {
+  font-family: 'Blosta Script';
+  src: url('../fonts/Blosta-Script.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Array';
+  src: url('../fonts/Array-Regular.woff2') format('woff2'),
+       url('../fonts/Array-Regular.woff') format('woff'),
+       url('../fonts/Array-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Array';
+  src: url('../fonts/Array-Bold.woff2') format('woff2'),
+       url('../fonts/Array-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Array-Wide';
+  src: url('../fonts/Array-Wide.woff2') format('woff2'),
+       url('../fonts/Array-Wide.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Array-BoldWide';
+  src: url('../fonts/Array-BoldWide.woff2') format('woff2'),
+       url('../fonts/Array-BoldWide.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-dark: #090314;
+  --bg-violet: #190a32;
+  --purple-glow: #a855f7;
+  --purple-light: #c084fc;
+  --purple-lavender: #e9d5ff;
+  --font-script: 'Blosta Script', cursive;
+  --font-title: 'Array-BoldWide', 'Array', sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-dark);
+  color: #ffffff;
+  font-family: var(--font-body);
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  color: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Background Aura Atmosphere */
+.aura-bg {
+  background: 
+    radial-gradient(ellipse at 50% 15%, rgba(168, 85, 247, 0.22) 0%, transparent 60%),
+    radial-gradient(circle at 10% 45%, rgba(147, 51, 234, 0.18) 0%, transparent 50%),
+    radial-gradient(circle at 85% 75%, rgba(192, 132, 252, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 95%, rgba(126, 34, 206, 0.25) 0%, transparent 65%),
+    #090314;
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+.font-title {
+  font-family: var(--font-title);
+  letter-spacing: -0.01em;
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Chrome metallic text */
+.text-chrome {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 40%, #94a3b8 70%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Star Shape Button like on Mockup */
+.star-btn-mockup {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, #7e22ce 0%, #9333ea 50%, #c084fc 100%);
+  color: #ffffff;
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.star-btn-mockup:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 50px rgba(192, 132, 252, 0.9),
+              inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* Canva-style Sticker Styling for Manual Activities */
+.canva-sticker {
+  display: inline-block;
+  background: #ffffff;
+  padding: 6px;
+  border-radius: 14px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 15px rgba(168, 85, 247, 0.2);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.canva-sticker:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  z-index: 40 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(192, 132, 252, 0.5);
+}
+
+.canva-sticker img {
+  border-radius: 10px;
+  display: block;
+}
+
+/* Realistic iPod Classic */
+.ipod-case {
+  width: 300px;
+  height: 490px;
+  background: linear-gradient(145deg, #18181b 0%, #09090b 100%);
+  border: 3.5px solid #3f3f46;
+  border-radius: 32px;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.85),
+    0 0 40px rgba(147, 51, 234, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.15);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  user-select: none;
+}
+
+.ipod-screen {
+  width: 100%;
+  height: 210px;
+  background: #000000;
+  border: 2.5px solid #27272a;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.ipod-wheel {
+  width: 175px;
+  height: 175px;
+  background: radial-gradient(circle, #18181b 0%, #121214 70%, #09090b 100%);
+  border: 2px solid #27272a;
+  border-radius: 50%;
+  margin-top: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.ipod-center-btn {
+  width: 62px;
+  height: 62px;
+  background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+  border: 1px solid #3f3f46;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Sound wave animation */
+@keyframes soundWave {
+  0% { height: 4px; }
+  50% { height: 24px; }
+  100% { height: 8px; }
+}
+
+/* Kinetic Typography */
+.kinetic-title span {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #090314;
+}
+::-webkit-scrollbar-thumb {
+  background: #9333ea;
+  border-radius: 4px;
+}
+
+/* Ambient Twinkling Floating Sparkles */
+@keyframes floatSparkle {
+  0% {
+    transform: translateY(0px) rotate(0deg) scale(0.75);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(-24px) rotate(180deg) scale(1.2);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.85));
+  }
+  100% {
+    transform: translateY(0px) rotate(360deg) scale(0.75);
+    opacity: 0.15;
+  }
+}
+
+.sparkle-star {
+  position: absolute;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  will-change: transform, opacity;
+}
+
+/* Hero Signature - Unclipped flourishes on scroll/swipe */
+.hero-signature {
+  font-family: var(--font-script);
+  font-size: clamp(3.8rem, 10vw, 10.5rem);
+  line-height: 1.05;
+  padding-bottom: 0.2em;
+  padding-right: 0.25em;
+  overflow: visible;
+  white-space: nowrap;
+  pointer-events: none;
+}
+

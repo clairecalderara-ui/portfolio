@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Projets — Claire Calderara</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="aura-bg text-slate-100 min-h-screen relative selection:bg-purple-600 selection:text-white">
+
+  <!-- Transparent Navigation -->
+  <header class="fixed top-0 left-0 w-full z-50 backdrop-blur-sm bg-[#090314]/50">
+    <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+      <a href="index.html" class="font-script text-3xl sm:text-4xl text-purple-200 hover:text-white transition-colors">
+        Claire
+      </a>
+
+      <nav class="flex items-center gap-6 font-title text-sm tracking-wider uppercase">
+        <a href="index.html" class="text-slate-300 hover:text-purple-300 transition-colors flex items-center gap-1.5">
+          <span>←</span>
+          <span>Accueil</span>
+        </a>
+        <a href="contact.html" class="text-slate-300 hover:text-purple-300 transition-colors">
+          Contact
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pt-32 pb-24 px-8 max-w-7xl mx-auto">
+    
+    <div class="mb-20">
+      <h1 class="font-title text-5xl sm:text-7xl lg:text-8xl text-white uppercase tracking-tight">
+        Mes <span class="text-chrome">Projets</span>
+      </h1>
+    </div>
+
+    <!-- Editorial List of Projects (No ugly rounded card boxes, clean aesthetic) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+
+      <!-- Behind the Lens -->
+      <a href="projets/behind-the-lens.html" class="group block">
+        <div class="relative aspect-video w-full overflow-hidden rounded-xl border border-purple-500/20 bg-black/40">
+          <img 
+            src="assets/images/behind-the-lens/IMG_4754.jpg" 
+            alt="Behind the Lens" 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+        <div class="mt-5 flex items-center justify-between">
+          <h2 class="font-title text-2xl sm:text-3xl text-white group-hover:text-purple-300 transition-colors uppercase">
+            Behind the Lens
+          </h2>
+          <span class="text-purple-400 group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+        <p class="font-body text-slate-400 text-sm mt-1">Clip musical à Bali • Moonkey Production</p>
+      </a>
+
+      <!-- Derrière l’objectif -->
+      <a href="projets/photography.html" class="group block">
+        <div class="relative aspect-video w-full overflow-hidden rounded-xl border border-purple-500/20 bg-black/40">
+          <img 
+            src="assets/images/photography/DSC04835.JPG" 
+            alt="Derrière l’objectif" 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+        <div class="mt-5 flex items-center justify-between">
+          <h2 class="font-title text-2xl sm:text-3xl text-white group-hover:text-purple-300 transition-colors uppercase">
+            Derrière l’objectif
+          </h2>
+          <span class="text-purple-400 group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+        <p class="font-body text-slate-400 text-sm mt-1">Photographie • L'appareil de mon père</p>
+      </a>
+
+      <!-- Les mains toujours occupées -->
+      <a href="projets/manual-activities.html" class="group block">
+        <div class="relative aspect-video w-full overflow-hidden rounded-xl border border-purple-500/20 bg-purple-950/20 flex items-center justify-center p-6">
+          <img 
+            src="assets/images/manual-activities/stickers/sticker_starfish_lighters.png" 
+            alt="Les mains toujours occupées" 
+            class="max-h-full max-w-full object-contain transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+        <div class="mt-5 flex items-center justify-between">
+          <h2 class="font-title text-2xl sm:text-3xl text-white group-hover:text-purple-300 transition-colors uppercase">
+            Les mains toujours occupées
+          </h2>
+          <span class="text-purple-400 group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+        <p class="font-body text-slate-400 text-sm mt-1">Briquets sculptés, argile, toiles & créations manuelles</p>
+      </a>
+
+      <!-- Marie-Louise et Robert -->
+      <a href="projets/marie-louise-et-robert.html" class="group block">
+        <div class="relative aspect-video w-full overflow-hidden rounded-xl border border-purple-500/20 bg-black/40">
+          <img 
+            src="assets/images/claire/IMG_3386.jpg" 
+            alt="Marie-Louise et Robert" 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+        <div class="mt-5 flex items-center justify-between">
+          <h2 class="font-title text-2xl sm:text-3xl text-white group-hover:text-purple-300 transition-colors uppercase">
+            Marie-Louise et Robert
+          </h2>
+          <span class="text-purple-400 group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+        <p class="font-body text-slate-400 text-sm mt-1">Documentaire familial en Alsace • Mémoire & Histoire</p>
+      </a>
+
+    </div>
+
+  </main>
+
+  <footer class="py-12 px-8 border-t border-purple-500/15 bg-[#06020d] text-slate-400 font-body text-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <span class="font-script text-3xl text-purple-200">Claire Calderara</span>
+      <div class="flex items-center gap-6 font-title text-xs tracking-wider uppercase">
+        <a href="index.html" class="hover:text-white">Accueil</a>
+        <a href="contact.html" class="hover:text-white">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/stars.js" defer></script>
+</body>
+</html>
